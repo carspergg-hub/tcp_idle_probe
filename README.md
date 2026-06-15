@@ -46,7 +46,7 @@ python3 tcp_idle_probe.py server --port 9999
 python3 tcp_idle_probe.py client --host <云主机公网IP>
 场景 B：已知范围的精细化刺探
 如果你怀疑超时时间在 300 秒左右，想以 10 秒为步进精确寻找临界点（测试 250s ~ 400s）：
-python3 tcp_idle_probe.py client --host <云主机公网IP> --start 250 --step 10 --count 15
+python3 tcp_idle_probe.py client --host <云主机公网IP> --start 250 --step 10 --count 15 --output result.log
 场景 C：网络较差时的宽容探测
 如果你所在的网络环境 RTT 抖动较大，可以通过 --tolerance 放宽双端通信的等待余量，并通过 --max-fails 提高熔断阈值：
 python3 tcp_idle_probe.py client --host <云主机公网IP> --tolerance 60.0 --max-fails 3

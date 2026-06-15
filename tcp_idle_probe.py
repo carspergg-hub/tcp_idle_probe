@@ -88,26 +88,31 @@ async def probe_task(host, port, idle_time, tolerance, delay, result_queue):
 
         writer.write(f"INIT-{idle_time}".encode())
         await writer.drain()
-        log(f"[Client] [{idle_time:4}s] 已建连，等待 PUSH ...")
+        log(f"[Client] [{idle_time:4}s] 已建连，等待服务端 PUSH ...")
 
         try:
             data = await asyncio.wait_for(reader.read(1024), timeout=idle_time + tolerance)
             if data and data.decode(errors='ignore') == f"PUSH-{idle_time}":
                 writer.write(f"ACK-{idle_time}".encode())
                 await writer.drain()
+                log(f"[Client] [{idle_time:4}s] [SUCCESS] 全双工连通")
                 status = "SUCCESS"
             else:
+                log(f"[Client] [{idle_time:4}s] [EOF] 服务端提前断开")
                 status = "EOF"
         except asyncio.CancelledError:
             status = "ABORTED"
             raise
 
     except asyncio.TimeoutError:
+        log(f"[Client] [{idle_time:4}s] [TIMEOUT] ETIMEDOUT")
         status = "TIMEOUT"
     except ConnectionResetError:
+        log(f"[Client] [{idle_time:4}s] [RESET] ECONNRESET")
         status = "RESET"
     except Exception as e:
         if not isinstance(e, asyncio.CancelledError):
+            log(f"[Client] [{idle_time:4}s] [ERROR] 异常: {type(e).__name__}: {e}")
             status = "ERROR"
 
     finally:

@@ -88,7 +88,7 @@ python3 tcp_idle_probe.py client --host <server-ip>
 
 精细探测：
 ```bash
-python3 tcp_idle_probe.py client --host <server-ip> --start 250 --step 10 --count 15
+python3 tcp_idle_probe.py client --host <server-ip> --start 250 --step 10 --count 15  --output result.log
 ```
 
 高抖动网络：

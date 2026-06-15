@@ -1,0 +1,4 @@
+# TCP Idle Probe - no external dependencies
+# Python standard library only (asyncio, socket, argparse)
+
+python>=3.8
